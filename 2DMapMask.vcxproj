@@ -134,9 +134,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="2DMapMask.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="DataRecord.h" />

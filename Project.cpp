@@ -241,6 +241,15 @@ void CProject::Open(){
 	openFileName.lpstrFile = szFileName;
 	openFileName.nFilterIndex = 1;
 	openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	char szCurDir[MAX_PATH];
+    GetCurrentDirectory(sizeof(szCurDir), szCurDir);
+	char* fd = strrchr(szCurDir,'\\');
+	fd[0]='\0';
+	strcat(szCurDir,"\\source\\*.jpg");
+
+	openFileName.lpstrFile = szCurDir;
+
 	string path = m_map.GetResPath();
 	if(path.empty()){
 		MessageBox(NULL,"新地图请先保存！","未知地图",NULL);

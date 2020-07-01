@@ -5,11 +5,11 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerWorkingDirectory>I:\BRMGame\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>..\..\demo</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>I:\BRMGame</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>..\..\demo</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>
