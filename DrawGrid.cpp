@@ -186,25 +186,25 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 	int width = CLayer::width()+1;
 	int height= CLayer::height()+1;
 
-	int cw = CLayer::CW()/CLayer::WS();
-	int ch = CLayer::CH()/CLayer::WS();
+	float cw = (float)CLayer::CW()/CLayer::WS();
+	float ch = (float)CLayer::CH()/CLayer::WS();
 
-	int sx = (-x%CLayer::CW())/CLayer::WS();
-	int sy = (-y%CLayer::CH())/CLayer::WS();
+	float sx = (float)(-x%CLayer::CW())/CLayer::WS();
+	float sy = (float)(-y%CLayer::CH())/CLayer::WS();
 
 	//通过循环画出横线
-	int offset = 0;
+	float offset = 0.0f;
 	for(int i=0;i<=height;i++)
 	{
-		graphics.DrawLine(GetPen(Color::Black), 0, sy+offset, CLayer::width(), sy+offset);
+		graphics.DrawLine(GetPen(Color::Black), 0.0f, sy+offset, (float)CLayer::width(), sy+offset);
 		offset+=ch;
 	}
 
 	//通过循环画出竖线
-	offset = 0;
+	offset = 0.0f;
 	for(int i=0;i<=width;i++)
 	{
-		graphics.DrawLine(GetPen(Color::Black), sx+offset, 0, sx+offset, CLayer::height());
+		graphics.DrawLine(GetPen(Color::Black), sx+offset, 0.0f, sx+offset, (float)CLayer::height());
 		offset+=cw;
 	}
 
