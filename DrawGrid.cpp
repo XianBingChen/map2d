@@ -4,6 +4,7 @@
 
 
 void CMapinfo::CreatRes(){
+	if(m_path.empty())return;
 	char fullpath[1024];
 	strcpy(fullpath,m_path.c_str());
 	char* ext = strchr(fullpath,'.');
@@ -178,21 +179,25 @@ void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy)
 void CDrawGrid::OnDraw(HDC dc,int x,int y){
 	Graphics graphics(dc);
 
-	int sx = -x%CLayer::CW();
-	int sy = -y%CLayer::CH();
 
 	int left = (x/CLayer::CW());
 	int top = (y/CLayer::CH());
 
-	int width = (int)(CLayer::width()/CLayer::CW())+1;
-	int height= (int)(CLayer::height()/CLayer::CH())+1;
+	int width = CLayer::width()+1;
+	int height= CLayer::height()+1;
+
+	int cw = CLayer::CW()/CLayer::WS();
+	int ch = CLayer::CH()/CLayer::WS();
+
+	int sx = (-x%CLayer::CW())/CLayer::WS();
+	int sy = (-y%CLayer::CH())/CLayer::WS();
 
 	//通过循环画出横线
 	int offset = 0;
 	for(int i=0;i<=height;i++)
 	{
 		graphics.DrawLine(GetPen(Color::Black), 0, sy+offset, CLayer::width(), sy+offset);
-		offset+=CLayer::CH();
+		offset+=ch;
 	}
 
 	//通过循环画出竖线
@@ -200,10 +205,12 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 	for(int i=0;i<=width;i++)
 	{
 		graphics.DrawLine(GetPen(Color::Black), sx+offset, 0, sx+offset, CLayer::height());
-		offset+=CLayer::CW();
+		offset+=cw;
 	}
 
-	graphics.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00)),sx+(cursorX-left)*CLayer::CW(),sy+(cursorY-top)*CLayer::CH(),CLayer::CW(),CLayer::CH());
+
+	graphics.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00)),sx+((cursorX-left)*cw),sy+((cursorY-top)*ch),cw,ch);
+
 	if(!CLayer::GetType())return;
 	for(int i=0;i<=height;i++)
 	{
@@ -218,12 +225,12 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 					
 					//if((CLayer::GetType()==MAP_BLOCK || !CLayer::GetType()) &&  mask & (1<<MAP_BLOCK))
 					if(mask & (1<<MAP_BLOCK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), sx+(j*CLayer::CW())+1, sy+(i*CLayer::CH())+1, CLayer::CW()-1, CLayer::CH()-1);
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), sx+(j*cw)+1, sy+(i*ch)+1, cw-1, ch-1);
 					}
 					
 					//if((CLayer::GetType()==MAP_MARK || !CLayer::GetType()) &&  mask & (1<<MAP_MARK))
 					if(mask & (1<<MAP_MARK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x99,0x12)), sx+(j*CLayer::CW())+1, sy+(i*CLayer::CH())+1, CLayer::CW()-1, CLayer::CH()-1);
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x99,0x12)), sx+(j*cw)+1, sy+(i*ch)+1, cw-1, ch-1);
 					}
 				}
 			}

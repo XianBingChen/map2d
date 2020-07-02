@@ -62,54 +62,6 @@ void CProject::OnTimer(int id){
 	}
 }
 
-
-void CProject::SetPostion(int x,int y){
-	if(x<m_ox || m_width> CLayer::WW()){
-		m_sx = m_ox;
-	}
-	else
-	if(x>(m_ox + CLayer::WW()-m_width)){
-		m_sx = m_ox + CLayer::WW()-m_width;
-	}
-	else{
-		m_sx=x;
-	}
-
-	if(y<m_oy || m_height>CLayer::WH()){
-		m_sy = m_oy;
-	}
-	else 
-	if(y>(m_oy + CLayer::WH()-m_height)){
-		m_sy = m_oy + CLayer::WH()-m_height;
-	}
-	else{
-		m_sy=y;
-	}
-}
-
-void CProject::SetOffset(int ox,int oy){
-	if(m_sx-ox<0 || m_width> CLayer::WW()){
-		m_ox = m_sx;
-	}
-	else
-	if(m_sx-ox>(CLayer::WW()-m_width)){
-		m_ox = m_sx - (CLayer::WW()-m_width);
-	}
-	else{
-		m_ox=ox;
-	}
-
-	if(m_sy-oy<0 || m_height>CLayer::WH()){
-		m_oy = m_sy;
-	}
-	else if(m_sy-oy>(CLayer::WH()-m_height)){
-		m_oy = m_sy - (CLayer::WH()-m_height);
-	}
-	else{
-		m_oy=oy;
-	}
-}
-
 void CProject::OnFlresh(HDC dc){
 	if(m_autox!=0){
 		SetOffset(m_ox+m_autox*CLayer::CW(),m_oy);
@@ -121,14 +73,16 @@ void CProject::OnFlresh(HDC dc){
 	int x = m_sx-m_ox;
 	int y = m_sy-m_oy;
 
-	m_background.OnDraw(m_cache, x, y);
+	int sx,sy;
+	GetScaleXY(sx,sy);
 
-	m_grid.OnDraw(m_cache, x, y);
-
+	RECT rc = {0, 0, CLayer::VW(), CLayer::VH()};
+	HBRUSH hBrush = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	::FillRect(m_cache,&rc,hBrush);
+	m_background.OnDraw(m_cache, sx, sy);
+	m_grid.OnDraw(m_cache, sx, sy);
 	m_minimap.OnDraw(m_cache, x, y);
-
 	SetStretchBltMode(dc,HALFTONE);
-
 	BitBlt(dc,0, 0, CLayer::VW(), CLayer::VH(), m_cache, 0, 0,SRCCOPY);
 }
 
@@ -229,6 +183,66 @@ void CProject::DoErase(bool b){
 
 void CProject::SelectLayer(MAP_STATE type){
 	m_grid.SetType(type);
+}
+
+void CProject::SetPostion(int x,int y){
+	if(x<m_ox || m_width> CLayer::WW()){
+		m_sx = m_ox;
+	}
+	else
+	if(x>(m_ox + CLayer::WW()-m_width)){
+		m_sx = m_ox + CLayer::WW()-m_width;
+	}
+	else{
+		m_sx=x;
+	}
+
+	if(y<m_oy || m_height>CLayer::WH()){
+		m_sy = m_oy;
+	}
+	else 
+	if(y>(m_oy + CLayer::WH()-m_height)){
+		m_sy = m_oy + CLayer::WH()-m_height;
+	}
+	else{
+		m_sy=y;
+	}
+}
+
+void CProject::SetOffset(int ox,int oy){
+	if(m_sx-ox<0 || m_width> CLayer::WW()){
+		m_ox = m_sx;
+	}
+	else
+	if(m_sx-ox>(CLayer::WW()-m_width)){
+		m_ox = m_sx - (CLayer::WW()-m_width);
+	}
+	else{
+		m_ox=ox;
+	}
+
+	if(m_sy-oy<0 || m_height>CLayer::WH()){
+		m_oy = m_sy;
+	}
+	else if(m_sy-oy>(CLayer::WH()-m_height)){
+		m_oy = m_sy - (CLayer::WH()-m_height);
+	}
+	else{
+		m_oy=oy;
+	}
+}
+
+void CProject::SetScaleXY(int s){
+	CLayer::setWS(s);
+}
+
+void CProject::GetScaleXY(int&x,int &y){
+	float sx2 = (float)(m_sx - m_ox);
+	float sy2 = (float)(m_sy - m_oy);
+	float ox = CLayer::VW()*(CLayer::WS()-1)/2;
+	float oy = CLayer::VH()*(CLayer::WS()-1)/2;
+	x = sx2-ox;
+	y = sy2-oy;
 }
 
 void CProject::Open(){

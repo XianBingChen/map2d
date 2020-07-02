@@ -21,6 +21,8 @@ private:
 
 	static int m_Wwidth;
 	static int m_Wheight;
+	
+	static int m_ScaleXY;
 
 	static bool m_bErase;
 	
@@ -54,6 +56,11 @@ public:
 
 	inline static int WW(){ return m_Wwidth;}
 	inline static int WH(){ return m_Wheight;}
+
+	inline static int WS(){ return m_ScaleXY;}
+
+	inline static void setWS(int s){ m_ScaleXY=s;}
+
 
 	inline static void setWWH(int w,int h){
 		m_Wwidth = w ;

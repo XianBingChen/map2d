@@ -65,7 +65,7 @@ void CBackGround::ReadRes(){
 			m_pic->UnlockBits(&bmpData);
 		}
 		else{
-			MessageBox(NULL,"图片加载失败","资源加载",NULL);
+			MessageBox(NULL,"图片加载失败，菜单-》导入/逆向资源","资源加载",NULL);
 		}
 	}
 	catch(...){
@@ -79,7 +79,11 @@ void CBackGround::ReadRes(){
 void CBackGround::OnDraw(HDC hdc,int x,int y){
 	Clear(hdc, m_defaultbg, x, y);
 	if(m_pic && m_pic->GetLastStatus()==S_OK){
-		CLayer::Draw(hdc, m_buffer, x, y, m_pic->GetWidth(), m_pic->GetHeight());
+		Graphics g(hdc);
+		RectF dst(0,0,CLayer::VW(),CLayer::VH());
+		g.DrawImage(m_pic, dst, x, y, CLayer::VW()*CLayer::WS(),CLayer::VH()*CLayer::WS(), UnitPixel);
+
+		//CLayer::Draw(hdc, m_buffer, x, y, m_pic->GetWidth(), m_pic->GetHeight());
 	}
 	else{
 		CLayer::Draw(hdc, NULL, NULL, NULL, NULL, NULL);

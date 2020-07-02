@@ -268,6 +268,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			::CheckMenuItem(hm,IDM_PEN,MF_CHECKED);
 			::CheckMenuItem(hm,IDM_ERASE,MF_UNCHECKED);
 			break;
+
+		case IDM_SCALE1:
+			proj->SetScaleXY(1);
+			::CheckMenuItem(hm,IDM_SCALE1,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_SCALE2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE4,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE8,MF_UNCHECKED);
+			break;	
+
+		case IDM_SCALE2:
+			proj->SetScaleXY(2);
+			::CheckMenuItem(hm,IDM_SCALE1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE2,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_SCALE4,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE8,MF_UNCHECKED);
+			break;
+			
+		case IDM_SCALE4:
+			proj->SetScaleXY(4);
+			::CheckMenuItem(hm,IDM_SCALE1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE4,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_SCALE8,MF_UNCHECKED);
+			break;
+			
+		case IDM_SCALE8:
+			proj->Clear();
+			proj->SetScaleXY(8);
+			::CheckMenuItem(hm,IDM_SCALE1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE4,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_SCALE8,MF_CHECKED);
+			break;
+
+
 		case IDM_SVAE:
 			proj->Save();
 			break;
