@@ -14,6 +14,7 @@ public:
 	void ReadRes();
 	void SetRes( string url );
 	void Save(string outdir);
+	void ScaleXY();
 	void OnDraw(HDC dc,int x,int y);
 	Bitmap& Getpic();
 };

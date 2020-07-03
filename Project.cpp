@@ -234,6 +234,7 @@ void CProject::SetOffset(int ox,int oy){
 
 void CProject::SetScaleXY(int s){
 	CLayer::setWS(s);
+	m_background.ScaleXY();
 }
 
 void CProject::GetScaleXY(int&x,int &y){

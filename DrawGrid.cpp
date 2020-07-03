@@ -192,6 +192,34 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 	float sx = (float)(-x%CLayer::CW())/CLayer::WS();
 	float sy = (float)(-y%CLayer::CH())/CLayer::WS();
 
+
+	if(!CLayer::GetType())return;
+	for(int i=0;i<=height/ch+1;i++)
+	{
+		map<int,map<int,int>>::iterator iter = m_cells.find(i+top);
+		if(iter!=m_cells.end()){
+			for(int j=0;j<=width/cw+1;j++)
+			{
+				map<int,int>::iterator iterx = iter->second.find(j+left);
+
+				if(iterx!=iter->second.end()){
+					int& mask = iterx->second;
+					
+					//if((CLayer::GetType()==MAP_BLOCK || !CLayer::GetType()) &&  mask & (1<<MAP_BLOCK))
+					if(mask & (1<<MAP_BLOCK)){
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), sx+(j*cw), sy+(i*ch), cw, ch);
+					}
+					
+					//if((CLayer::GetType()==MAP_MARK || !CLayer::GetType()) &&  mask & (1<<MAP_MARK))
+					if(mask & (1<<MAP_MARK)){
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x99,0x12)), sx+(j*cw), sy+(i*ch), cw, ch);
+					}
+				}
+			}
+		}
+	}
+
+
 	//通过循环画出横线
 	float offset = 0.0f;
 	for(int i=0;i<=height;i++)
@@ -210,32 +238,6 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 
 
 	graphics.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00)),sx+((cursorX-left)*cw),sy+((cursorY-top)*ch),cw,ch);
-
-	if(!CLayer::GetType())return;
-	for(int i=0;i<=height;i++)
-	{
-		map<int,map<int,int>>::iterator iter = m_cells.find(i+top);
-		if(iter!=m_cells.end()){
-			for(int j=0;j<=width;j++)
-			{
-				map<int,int>::iterator iterx = iter->second.find(j+left);
-
-				if(iterx!=iter->second.end()){
-					int& mask = iterx->second;
-					
-					//if((CLayer::GetType()==MAP_BLOCK || !CLayer::GetType()) &&  mask & (1<<MAP_BLOCK))
-					if(mask & (1<<MAP_BLOCK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), sx+(j*cw)+1, sy+(i*ch)+1, cw-1, ch-1);
-					}
-					
-					//if((CLayer::GetType()==MAP_MARK || !CLayer::GetType()) &&  mask & (1<<MAP_MARK))
-					if(mask & (1<<MAP_MARK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x99,0x12)), sx+(j*cw)+1, sy+(i*ch)+1, cw-1, ch-1);
-					}
-				}
-			}
-		}
-	}
 }
 
 void CDrawGrid::Hover(int x,int y){

@@ -53,11 +53,18 @@ void CLayer::Draw(HDC dc, unsigned char* buf, int x, int y, int w, int h){
 	if(buf){
 		int top = 0;
 		int left = 0;
-		int rw = m_width;
-		int rh = m_height;
+
+		if(y>h){
+			y=h-1;
+		}
 
 		if( y < 0 ){
 			top = -y;
+			y=0;
+		}
+
+		if(x>w){
+			x=w-1;
 		}
 
 		if( x < 0 ){
@@ -65,20 +72,28 @@ void CLayer::Draw(HDC dc, unsigned char* buf, int x, int y, int w, int h){
 			x = 0;
 		}
 	
-		if( h - y < rh - top ){
+		int rw = m_width - left;
+		int rh = m_height - top;
+
+		if( h - y < rh )
 			rh = h - y;
-		}
 
-		if( w - x < rw - left ){
+		
+		if( w - x < rw )
 			rw = w - x;
-		}
 
-		if(rw - left>0){
-			for(int i=top;i<rh;i++){
-				memcpy(
-					m_buf+( i*m_width + left )*BPP_RGB,
-					buf + ((y+i)*w + x )*BPP_RGB,
-					(rw - left)*BPP_RGB);
+
+		if(rw > w) 
+			rw = w;
+
+		if(rh > h) 
+			rh = h;
+
+		if(rw>0 && rh>0){
+			for(int i=0;i<rh;i++){
+				int src = ((y+i)*w + x );
+				int dst = ((top+i)*m_width + left);
+				memcpy( m_buf + dst*BPP_RGB, buf + src*BPP_RGB, rw*BPP_RGB );
 			}
 		}
 	}

@@ -4,8 +4,8 @@
 
 CBackGround::CBackGround(int width, int height)
 	:CLayer(width,height)
-	,m_pic(NULL)
 {
+	m_pic=NULL;
 	m_buffer=NULL;
 	ImageFromIDResource(IDB_GRASS,"PNG",m_defaultbg);
 }
@@ -39,30 +39,11 @@ void CBackGround::ReadRes(){
 		delete m_pic;
 		m_pic=NULL;
 	}
-	if(m_buffer){
-		delete m_buffer;
-		m_buffer = NULL;
-	}
-	
+
 	try{
 		m_pic = Bitmap::FromFile(A2W(m_url.c_str()));
 		if(m_pic->GetLastStatus()==S_OK){
-			DWORD Width, Height;
-			Width = m_pic->GetWidth();
-			Height = m_pic->GetHeight();
-			CLayer::setWWH(Width, Height);
-			m_buffer = new unsigned char[Width * Height * BPP_RGB];
-
-			BitmapData bmpData;
-			bmpData.Width  = Width;
-			bmpData.Height = Height;
-			bmpData.Stride = Width * BPP_RGB; // 缓冲区每行大小，自行分配，每行就没有多余字节了
-			bmpData.Scan0  = m_buffer;
-			bmpData.PixelFormat = PixelFormat24bppRGB;
-			bmpData.Reserved = NULL;
-			Rect rct(0, 0, Width, Height);
-			m_pic->LockBits(&rct, ImageLockModeRead | ImageLockModeUserInputBuf, PixelFormat24bppRGB,  &bmpData);
-			m_pic->UnlockBits(&bmpData);
+			CLayer::setWWH(m_pic->GetWidth(), m_pic->GetHeight());		
 		}
 		else{
 			MessageBox(NULL,"图片加载失败，菜单-》导入/逆向资源","资源加载",NULL);
@@ -74,16 +55,57 @@ void CBackGround::ReadRes(){
 		sprintf_s(msg,1024,"您系统内存太小，无法加载资源文件");
 		MessageBox(NULL,msg,"内存不足",NULL);
 	}
+	ScaleXY();
+}
+
+void CBackGround::ScaleXY(){
+	if(m_buffer){
+		delete m_buffer;
+		m_buffer = NULL;
+	}
+
+	int scaleW = CLayer::WW()/CLayer::WS();
+	int scaleH = CLayer::WH()/CLayer::WS();
+
+	m_buffer = new unsigned char[scaleW * scaleH * BPP_RGB];
+
+	BitmapData bmpData;
+	bmpData.Height = scaleH;
+	bmpData.Width  = scaleW;
+	bmpData.Stride = scaleW * BPP_RGB; // 缓冲区每行大小，自行分配，每行就没有多余字节了
+	bmpData.Scan0  = m_buffer;
+	bmpData.PixelFormat = PixelFormat24bppRGB;
+	bmpData.Reserved = NULL;
+	Rect rct(0, 0, scaleW, scaleH);
+
+	if(m_pic && m_pic->GetLastStatus()==S_OK){
+		if(CLayer::WS()==1){
+			m_pic->LockBits(&rct, ImageLockModeRead | ImageLockModeUserInputBuf, PixelFormat24bppRGB,  &bmpData);
+			m_pic->UnlockBits(&bmpData);	
+		}
+		else{
+			Bitmap* m_scale = new Bitmap(scaleW,scaleH);
+			Graphics* g = Graphics::FromImage(m_scale);
+			RectF dst(0,0,scaleW,scaleH);
+			g->DrawImage(m_pic, dst, 0, 0, m_pic->GetWidth(),m_pic->GetHeight(), UnitPixel);
+			m_scale->LockBits(&rct, ImageLockModeRead | ImageLockModeUserInputBuf, PixelFormat24bppRGB,  &bmpData);
+			m_scale->UnlockBits(&bmpData);	
+			delete g;
+			delete m_scale;
+		}
+	}
 }
 
 void CBackGround::OnDraw(HDC hdc,int x,int y){
 	Clear(hdc, m_defaultbg, x, y);
 	if(m_pic && m_pic->GetLastStatus()==S_OK){
-		Graphics g(hdc);
-		RectF dst(0,0,CLayer::VW(),CLayer::VH());
-		g.DrawImage(m_pic, dst, x, y, CLayer::VW()*CLayer::WS(),CLayer::VH()*CLayer::WS(), UnitPixel);
+		//Graphics g(hdc);
+		//RectF dst(0,0,CLayer::VW(),CLayer::VH());
+		//g.DrawImage(m_pic, dst, x, y, CLayer::VW()*CLayer::WS(),CLayer::VH()*CLayer::WS(), UnitPixel);
 
-		//CLayer::Draw(hdc, m_buffer, x, y, m_pic->GetWidth(), m_pic->GetHeight());
+		int scaleW = CLayer::WW()/CLayer::WS();
+		int scaleH = CLayer::WH()/CLayer::WS();
+		CLayer::Draw(hdc, m_buffer, x/CLayer::WS(), y/CLayer::WS(), scaleW, scaleH);
 	}
 	else{
 		CLayer::Draw(hdc, NULL, NULL, NULL, NULL, NULL);
@@ -153,25 +175,20 @@ void CBackGround::Save(string outdir){
 	Bitmap* bmpCombine =new Bitmap(512,512);
 	
 	auto_folder cd(outdir.c_str());
-	Graphics * pG = NULL;
-	pG = Graphics::FromImage(bmpCombine);
-	if (pG!=NULL)
-	{	
-		int hc = CLayer::WH()/512+1;
-		int wc = CLayer::WW()/512+1;
-		for(int i=0;i<=hc;i++){
-			for(int j=0;j<=wc;j++){
-				//if(isBlack(m_buffer,j*512,i*512,(j+1)*512,(i+1)*512,mRealWidth,mRealHeight))continue;
-				pG->Clear(Color(0x00));
-				char path[256]={0};
-				RectF dst(0.0,0.0,512.0,512.0);
-				pG->DrawImage(m_pic, dst, j*512, i*512, 512, 512, UnitPixel);
-				sprintf(path,"%s_r%d_c%d.jpg",outdir.c_str(),i+1,j+1);
+	Graphics  g(bmpCombine);
+	int hc = CLayer::WH()/512+1;
+	int wc = CLayer::WW()/512+1;
+	for(int i=0;i<=hc;i++){
+		for(int j=0;j<=wc;j++){
+			//if(isBlack(m_buffer,j*512,i*512,(j+1)*512,(i+1)*512,mRealWidth,mRealHeight))continue;
+			g.Clear(Color(0x00));
+			char path[256]={0};
+			RectF dst(0.0,0.0,512.0,512.0);
+			g.DrawImage(m_pic, dst, j*512, i*512, 512, 512, UnitPixel);
+			sprintf(path,"%s_r%d_c%d.jpg",outdir.c_str(),i+1,j+1);
 
-				SavePicture(*bmpCombine,"image/jpeg",path);
-			}
+			SavePicture(*bmpCombine,"image/jpeg",path);
 		}
-		delete pG;
 	}
 	delete bmpCombine;
 }
