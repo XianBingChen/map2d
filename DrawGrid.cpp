@@ -59,7 +59,7 @@ void CMapinfo::Save(string path){
 	if( file )
 	{
 		unsigned short version = 4;
-		unsigned short width=CLayer::WW()/CLayer::CW();
+		unsigned short width = CLayer::WW()/CLayer::CW();
 		unsigned short height = CLayer::WH()/CLayer::CH();
 		unsigned short gwidth=0,gheight=0;
 		unsigned char tile_dir=0;
@@ -78,7 +78,7 @@ void CMapinfo::Save(string path){
 		int l=0;
 		int b = area(0,0);
 		
-		for(int y=0;y<height;y++){
+		for(int y=0;y<=height;y++){
 			for(int x=0;x<width;x++){
 				int b2 = area(x,y);
 				if(b2!=b || l==255){
@@ -235,15 +235,36 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 		graphics.DrawLine(GetPen(Color::Black), sx+offset, 0.0f, sx+offset, (float)CLayer::height());
 		offset+=cw;
 	}
+	
 
+	for(int i=0;i<CLayer::GetPenSize();i++){
+		for(int j=0;j<CLayer::GetPenSize();j++){
+			graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x4e,0x4e,0xf2)),sx+(((hoverX-CLayer::GetPenSize()/2)-left+i)*cw),sy+(((hoverY-CLayer::GetPenSize()/2)-top+j)*ch),cw,ch);
+		}
+	}
+	
+	graphics.DrawRectangle(
+		GetPen(Color::MakeARGB(0xFF,0x4e,0x4e,0xf2)),
+		sx+(((hoverX-CLayer::GetPenSize()/2)-left)*cw),
+		sy+(((hoverY-CLayer::GetPenSize()/2)-top)*ch),
+		(float)cw*CLayer::GetPenSize(),
+		(float)ch*CLayer::GetPenSize()
+	);
 
-	graphics.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00)),sx+((cursorX-left)*cw),sy+((cursorY-top)*ch),cw,ch);
+	graphics.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0x4e,0x4e,0xf2)),sx+((cursorX-left)*cw)+1.0,sy+((cursorY-top)*ch)+1.0,cw-2.0f,ch-2.0f);
+
 }
 
-void CDrawGrid::Hover(int x,int y){
+void CDrawGrid::Select(int x,int y){
 	cursorX = x/CLayer::CW();
 	cursorY = y/CLayer::CH();
 }
+
+void CDrawGrid::Hover(int x,int y){
+	hoverX = x/CLayer::CW();
+	hoverY = y/CLayer::CH();
+}
+
 
 void CDrawGrid::SetMaskOne(int x2,int y2,MAP_STATE a,bool set){
 	if(x2<0 || y2<0)return;

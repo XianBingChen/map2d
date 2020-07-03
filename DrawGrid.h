@@ -140,11 +140,14 @@ private:
 	bool doMask;
 	int cursorX;
 	int cursorY;
+	int hoverX;
+	int hoverY;
 public:
 	CDrawGrid(int width, int height);
 	~CDrawGrid(void);
 	void OnDraw(HDC dc,int x,int y);
 	void OnDrawMini(Graphics& g,float x,float y,float sx,float sy);
+	void Select(int x,int y);
 	void Hover(int x,int y);
 	void SetMasks(int x,int y,MAP_STATE,bool);
 	void SetMaskOne(int x2,int y2,MAP_STATE a,bool set);

@@ -115,8 +115,19 @@ void CProject::OnMouseMove(int x,int y){
 			if(!m_backOnly){
 				m_grid.SetMaskOne(sx, sy, m_grid.GetType(), !CLayer::isErase());
 			}
-			m_grid.Hover(sx, sy);
+			m_grid.Select(sx, sy);
 		}
+	}
+
+	if(m_minimap.inrect(x,y)){
+		return;
+	}
+	int sx,sy;
+	GetScaleXY(sx,sy);
+	sx += x*CLayer::WS();
+	sy += y*CLayer::WS();
+	if(sx>=0 && sy>=0){
+		m_grid.Hover(sx, sy);
 	}
 }
 
@@ -124,6 +135,7 @@ void CProject::OnMouseDown(int x,int y, bool bShift){
 	if(m_minimap.inrect(x,y)){
 		return;
 	}
+
 	m_bHover = true;
 	int sx,sy;
 	GetScaleXY(sx,sy);
@@ -134,7 +146,7 @@ void CProject::OnMouseDown(int x,int y, bool bShift){
 			m_grid.SetMasks(sx, sy, m_grid.GetType(), !CLayer::isErase());
 		else{
 			m_grid.SetMaskOne(sx, sy, m_grid.GetType(), !CLayer::isErase());
-			m_grid.Hover(sx, sy);
+			m_grid.Select(sx, sy);
 		}
 	}
 }
