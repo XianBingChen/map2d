@@ -147,6 +147,7 @@ public:
 	void OnDrawMini(Graphics& g,float x,float y,float sx,float sy);
 	void Hover(int x,int y);
 	void SetMasks(int x,int y,MAP_STATE,bool);
+	void SetMaskOne(int x2,int y2,MAP_STATE a,bool set);
 	inline void GetPosition(int &x,int &y){
 		x = cursorX;
 		y = cursorY;

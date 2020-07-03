@@ -14,8 +14,6 @@ private:
 	int m_width;
 	int m_height;
 	int m_backOnly;
-	float ScaleX;
-	float ScaleY;
 	int m_bDragMinimap;
 
 	bool m_bHover;

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <direct.h>
 #include "resource.h"
 #include "BackGround.h"
 
@@ -81,7 +82,7 @@ void CBackGround::ScaleXY(){
 	if(m_pic && m_pic->GetLastStatus()==S_OK){
 		if(CLayer::WS()==1){
 			m_pic->LockBits(&rct, ImageLockModeRead | ImageLockModeUserInputBuf, PixelFormat24bppRGB,  &bmpData);
-			m_pic->UnlockBits(&bmpData);	
+			m_pic->UnlockBits(&bmpData);
 		}
 		else{
 			Bitmap* m_scale = new Bitmap(scaleW,scaleH);
@@ -131,10 +132,10 @@ bool isBlack(unsigned char* buf, int l, int t, int r, int b, int w, int h){
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 
-class auto_folder
+class auto_clearfolder
 {
 public:
-    auto_folder(LPCTSTR pszPath)
+    auto_clearfolder(LPCTSTR pszPath)
     {
         //如果后面有\\则是路径，如果没有，但有后缀，则是文件，无后缀则也是路径
         char szPath[_MAX_PATH] = {0};
@@ -150,8 +151,12 @@ public:
 
         PathAddBackslash(szPath);
 
-        if (PathIsDirectory(szPath))
+        if (PathIsDirectory(szPath)){
+			DeleteFolderAll(szPath);
+			Sleep(10);
+			CreateDirectory(szPath, 0);
             return;
+		}
 
         char* psp = strchr(szPath, '\\');
         while(psp)
@@ -166,6 +171,68 @@ public:
             psp = strchr(psp + 1, '\\');
         }
     };
+
+	bool DeleteFolderAll(const char* pSrcPath )
+	{
+		if(pSrcPath == NULL)
+			return false;
+
+		char pwcPath[MAX_PATH];
+		strcpy(pwcPath , pSrcPath);
+		int ilen = strlen(pwcPath);
+
+		if (pwcPath[ilen-1] == L'\\')
+		{
+			pwcPath[ilen-1] = 0;
+		}
+
+
+		char wcPath[MAX_PATH] = {0};
+		strcpy(wcPath,pwcPath);
+		strcat(wcPath,_T("\\*.*"));
+		WIN32_FIND_DATA FindFileData;
+		ZeroMemory(&FindFileData,sizeof(WIN32_FIND_DATA));
+
+		HANDLE hFindFile = FindFirstFile(wcPath,&FindFileData);
+
+		if(hFindFile == INVALID_HANDLE_VALUE)
+			return false;
+
+		BOOL bContinue = true;
+
+		while (bContinue != false)
+		{
+			//bIsDots为真表示是.或..
+			bool bIsDots = (strcmp(FindFileData.cFileName,_T(".")) == 0 || strcmp(FindFileData.cFileName,_T("..")) == 0);
+			strcpy(wcPath,pwcPath);
+			strcat(wcPath,_T("\\"));
+			strcat(wcPath,FindFileData.cFileName);
+			if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0 && bIsDots == false)
+			{
+				//是目录,就再进入该目录
+
+				DeleteFolderAll(wcPath);
+				//寻找下一文件
+				bContinue = FindNextFile(hFindFile,&FindFileData);
+				continue;
+			}
+
+			if (bIsDots == false)
+			{
+				//是文件删除之
+				DeleteFile(wcPath);
+			}
+			//寻找下一文件
+			bContinue = FindNextFile(hFindFile,&FindFileData);
+
+		}
+
+		FindClose(hFindFile);
+
+		//删除空目录
+		RemoveDirectory(pwcPath);
+		return true;
+	}
 };
 
 void CBackGround::Save(string outdir){
@@ -174,7 +241,7 @@ void CBackGround::Save(string outdir){
 	int mRealHeight =  m_pic->GetHeight();
 	Bitmap* bmpCombine =new Bitmap(512,512);
 	
-	auto_folder cd(outdir.c_str());
+	auto_clearfolder cd(outdir.c_str());
 	Graphics  g(bmpCombine);
 	int hc = CLayer::WH()/512+1;
 	int wc = CLayer::WW()/512+1;
@@ -186,7 +253,6 @@ void CBackGround::Save(string outdir){
 			RectF dst(0.0,0.0,512.0,512.0);
 			g.DrawImage(m_pic, dst, j*512, i*512, 512, 512, UnitPixel);
 			sprintf(path,"%s_r%d_c%d.jpg",outdir.c_str(),i+1,j+1);
-
 			SavePicture(*bmpCombine,"image/jpeg",path);
 		}
 	}

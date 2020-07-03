@@ -17,8 +17,6 @@ CProject::CProject(SetTimerPr _SetTimer,HWND hWnd,int width,int height)
 	m_oy=0;
 	m_sx=0;
 	m_sy=0;
-	ScaleX = 1.0f;
-	ScaleY = 1.0f;
 	m_autox = 0;
 	m_autoy = 0;
 	m_backOnly = true;
@@ -64,10 +62,10 @@ void CProject::OnTimer(int id){
 
 void CProject::OnFlresh(HDC dc){
 	if(m_autox!=0){
-		SetOffset(m_ox+m_autox*CLayer::CW(),m_oy);
+		SetOffset(m_ox+m_autox*CLayer::CW()*CLayer::WS(),m_oy);
 	}
 	if(m_autoy!=0){
-		SetOffset(m_ox,m_oy+m_autoy*CLayer::CH());
+		SetOffset(m_ox,m_oy+m_autoy*CLayer::CH()*CLayer::WS());
 	}
 
 	int x = m_sx-m_ox;
@@ -98,25 +96,26 @@ void CProject::StarDrag(int x,int y){
 }
 
 void CProject::OnDrag(int x,int y,int ox,int oy){
-	if(m_bDragMinimap){		
-		OutputDebugPrintf("%d,%d\n",x,y);
+	if(m_bDragMinimap){
 		m_minimap.Hover(x,y);
 		SetPostion(x-CLayer::VW()/2,y-CLayer::VH()/2);
 	}
 	else{
-		SetOffset(ScaleX*ox,ScaleY*oy);
+		SetOffset(CLayer::WS()*ox,CLayer::WS()*oy);
 	}
 }
 
 void CProject::OnMouseMove(int x,int y){
 	if(m_bHover){
-		x = int((m_sx-m_ox+x)/CLayer::CW());
-		y = int((m_sy-m_oy+y)/CLayer::CH());
-		if(x>=0 && y>=0){
+		int sx,sy;
+		GetScaleXY(sx,sy);
+		sx += x*CLayer::WS();
+		sy += y*CLayer::WS();
+		if(sx>=0 && sy>=0){
 			if(!m_backOnly){
-				m_grid.SetMask(x, y, m_grid.GetType(), !CLayer::isErase());
+				m_grid.SetMaskOne(sx, sy, m_grid.GetType(), !CLayer::isErase());
 			}
-			m_grid.Hover(x,y);
+			m_grid.Hover(sx, sy);
 		}
 	}
 }
@@ -126,14 +125,16 @@ void CProject::OnMouseDown(int x,int y, bool bShift){
 		return;
 	}
 	m_bHover = true;
-	x = int((m_sx-m_ox+x)/CLayer::CW());
-	y = int((m_sy-m_oy+y)/CLayer::CH());
-	if(x>=0 && y>=0){
+	int sx,sy;
+	GetScaleXY(sx,sy);
+	sx += x*CLayer::WS();
+	sy += y*CLayer::WS();
+	if(sx>=0 && sy>=0){
 		if(bShift)
-			m_grid.SetMasks(x, y, m_grid.GetType(), !CLayer::isErase());
+			m_grid.SetMasks(sx, sy, m_grid.GetType(), !CLayer::isErase());
 		else{
-			m_grid.SetMask(x, y, m_grid.GetType(), !CLayer::isErase());
-			m_grid.Hover(x,y);
+			m_grid.SetMaskOne(sx, sy, m_grid.GetType(), !CLayer::isErase());
+			m_grid.Hover(sx, sy);
 		}
 	}
 }

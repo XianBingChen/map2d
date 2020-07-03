@@ -105,7 +105,8 @@ void CLayer::Clear(HDC dc, Image* img,int x, int y){
 	Graphics g(m_hdc);
 	int offsetX=0;
 	int offsetY=0;
-
+	x/=CLayer::WS();
+	y/=CLayer::WS();
 	offsetX = abs(x)%img->GetWidth();
 	offsetY = abs(y)%img->GetHeight();
 	if(x<0){

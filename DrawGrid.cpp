@@ -241,12 +241,21 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 }
 
 void CDrawGrid::Hover(int x,int y){
-	cursorX = x;
-	cursorY = y;
+	cursorX = x/CLayer::CW();
+	cursorY = y/CLayer::CH();
+}
+
+void CDrawGrid::SetMaskOne(int x2,int y2,MAP_STATE a,bool set){
+	if(x2<0 || y2<0)return;
+	x2/=CLayer::CW();
+	y2/=CLayer::CH();
+	SetMask(x2,y2,a,set);
 }
 
 void CDrawGrid::SetMasks(int x2,int y2,MAP_STATE a,bool set){
 	if(x2<0 || y2<0)return;
+	x2/=CLayer::CW();
+	y2/=CLayer::CH();
 	int x1 = cursorX;
 	int y1 = cursorY;
 	if(cursorX>x2){
