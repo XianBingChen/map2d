@@ -211,22 +211,22 @@ void CProject::SetPostion(int x,int y){
 }
 
 void CProject::SetOffset(int ox,int oy){
-	if(m_sx-ox<0 || m_width> CLayer::WW()){
+	if(m_sx-ox<0 || CLayer::VW()> CLayer::WW()){
 		m_ox = m_sx;
 	}
 	else
-	if(m_sx-ox>(CLayer::WW()-m_width)){
-		m_ox = m_sx - (CLayer::WW()-m_width);
+	if(m_sx-ox>(CLayer::WW()-CLayer::VW())){
+		m_ox = m_sx - (CLayer::WW()-CLayer::VW());
 	}
 	else{
 		m_ox=ox;
 	}
 
-	if(m_sy-oy<0 || m_height>CLayer::WH()){
+	if(m_sy-oy<0 || CLayer::VH()>CLayer::WH()){
 		m_oy = m_sy;
 	}
-	else if(m_sy-oy>(CLayer::WH()-m_height)){
-		m_oy = m_sy - (CLayer::WH()-m_height);
+	else if(m_sy-oy>(CLayer::WH()-CLayer::VH())){
+		m_oy = m_sy - (CLayer::WH()-CLayer::VH());
 	}
 	else{
 		m_oy=oy;
