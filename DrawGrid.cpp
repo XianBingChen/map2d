@@ -247,9 +247,16 @@ void CDrawGrid::Hover(int x,int y){
 
 void CDrawGrid::SetMaskOne(int x2,int y2,MAP_STATE a,bool set){
 	if(x2<0 || y2<0)return;
-	x2/=CLayer::CW();
-	y2/=CLayer::CH();
-	SetMask(x2,y2,a,set);
+	x2 /= CLayer::CW();
+	y2 /= CLayer::CH();
+	x2 -= CLayer::GetPenSize()/2;
+	y2 -= CLayer::GetPenSize()/2;
+
+	for(int i=0;i<CLayer::GetPenSize();i++){
+		for(int j=0;j<CLayer::GetPenSize();j++){
+			SetMask(x2+i,y2+j,a,set);
+		}
+	}
 }
 
 void CDrawGrid::SetMasks(int x2,int y2,MAP_STATE a,bool set){

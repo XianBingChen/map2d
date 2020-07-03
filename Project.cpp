@@ -233,6 +233,10 @@ void CProject::SetOffset(int ox,int oy){
 	}
 }
 
+void CProject::SetPenSize(int s){
+	CLayer::SetPenSize(s);
+}
+
 void CProject::SetScaleXY(int s){
 	CLayer::setWS(s);
 	m_background.ScaleXY();

@@ -54,6 +54,7 @@ public:
 	void SetPostion(int x,int y);
 	void SetOffset(int ox,int oy);
 	void SetScaleXY(int s);
+	void SetPenSize(int s);
 	void GetScaleXY(int&x,int &y);
 	inline void ShowBack(bool b){
 		m_backOnly=b;

@@ -302,6 +302,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			::CheckMenuItem(hm,IDM_SCALE8,MF_CHECKED);
 			break;
 
+		case IDM_PEN_X1:
+			proj->SetPenSize(1);
+			::CheckMenuItem(hm,IDM_PEN_X1,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X3,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X4,MF_UNCHECKED);
+			break;
+
+		case IDM_PEN_X2:
+			proj->SetPenSize(3);
+			::CheckMenuItem(hm,IDM_PEN_X1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X2,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X3,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X4,MF_UNCHECKED);
+			break;
+
+		case IDM_PEN_X3:
+			proj->SetPenSize(5);
+			::CheckMenuItem(hm,IDM_PEN_X1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X3,MF_CHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X4,MF_UNCHECKED);
+
+		case IDM_PEN_X4:
+			proj->SetPenSize(7);
+			::CheckMenuItem(hm,IDM_PEN_X1,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X2,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X3,MF_UNCHECKED);
+			::CheckMenuItem(hm,IDM_PEN_X4,MF_CHECKED);
+			break;
 
 		case IDM_SVAE:
 			proj->Save();

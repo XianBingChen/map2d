@@ -28,6 +28,7 @@ private:
 	
 	static MAP_STATE m_GridType; 
 
+	static int m_PenSize;
 
 	int m_width;
 	int m_height;
@@ -60,6 +61,11 @@ public:
 	inline static int WS(){ return m_ScaleXY;}
 
 	inline static void setWS(int s){ m_ScaleXY=s;}
+
+
+	inline static int GetPenSize(){ return m_PenSize;}
+
+	inline static void SetPenSize(int s){ m_PenSize=s;}
 
 
 	inline static void setWWH(int w,int h){

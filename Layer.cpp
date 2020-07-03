@@ -9,7 +9,7 @@ int CLayer::m_Wwidth=1;
 int CLayer::m_Wheight=1;
 
 int CLayer::m_ScaleXY=1;
-
+int CLayer::m_PenSize=1;
 
 bool CLayer::m_bErase=0;
 MAP_STATE  CLayer::m_GridType=MAP_NORMAL;
