@@ -135,12 +135,12 @@ void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy)
 			
 			//if((CLayer::GetType()==MAP_BLOCK || !CLayer::GetType()) &&  mask & (1<<MAP_BLOCK))
 			if(mask & (1<<MAP_BLOCK)){
-				graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), x+(j*CLayer::CW())*sx, y+(i*CLayer::CH())*sy, CLayer::CW()*sx, CLayer::CH()*sy);
+				graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x00,0x0)), x+(j*CLayer::CW())*sx, y+(i*CLayer::CH())*sy, CLayer::CW()*sx, CLayer::CH()*sy);
 			}
 					
 			//if((CLayer::GetType()==MAP_MARK || !CLayer::GetType()) &&  mask & (1<<MAP_MARK))
 			if( mask & (1<<MAP_MARK)){
-				graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xff,0x99,0x12)), x+(j*CLayer::CW())*sx, y+(i*CLayer::CH())*sy, CLayer::CW()*sx, CLayer::CH()*sy);
+				graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x00,0xFF,0x00)), x+(j*CLayer::CW())*sx, y+(i*CLayer::CH())*sy, CLayer::CW()*sx, CLayer::CH()*sy);
 			}
 		}
 	}
@@ -173,7 +173,7 @@ void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy)
 		}
 	}
 
-	graphics.DrawString(text, (INT)wcslen(text), &font,Gdiplus::PointF(x, y),GetBrush(Color::MakeARGB(0xFF,0x00,0xFF,0x00)));
+	graphics.DrawString(text, (INT)wcslen(text), &font,Gdiplus::PointF(x, y),GetBrush(Color::MakeARGB(0xFF,0xFF,0xFF,0xFF)));
 }
 
 void CDrawGrid::OnDraw(HDC dc,int x,int y){
@@ -207,12 +207,12 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 					
 					//if((CLayer::GetType()==MAP_BLOCK || !CLayer::GetType()) &&  mask & (1<<MAP_BLOCK))
 					if(mask & (1<<MAP_BLOCK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x88,0x99,0x12)), sx+(j*cw), sy+(i*ch), cw, ch);
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x00,0x00)), sx+(j*cw), sy+(i*ch), cw, ch);
 					}
 					
 					//if((CLayer::GetType()==MAP_MARK || !CLayer::GetType()) &&  mask & (1<<MAP_MARK))
 					if(mask & (1<<MAP_MARK)){
-						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0xFF,0x99,0x12)), sx+(j*cw), sy+(i*ch), cw, ch);
+						graphics.FillRectangle(GetBrush(Color::MakeARGB(0x66,0x00,0xFF,0x00)), sx+(j*cw), sy+(i*ch), cw, ch);
 					}
 				}
 			}

@@ -187,23 +187,23 @@ void CProject::SelectLayer(MAP_STATE type){
 }
 
 void CProject::SetPostion(int x,int y){
-	if(x<m_ox || m_width> CLayer::WW()){
+	if(x<m_ox || CLayer::VW()> CLayer::WW()){
 		m_sx = m_ox;
 	}
 	else
-	if(x>(m_ox + CLayer::WW()-m_width)){
-		m_sx = m_ox + CLayer::WW()-m_width;
+	if(x>(m_ox + CLayer::WW()-CLayer::VW())){
+		m_sx = m_ox + CLayer::WW()-CLayer::VW();
 	}
 	else{
 		m_sx=x;
 	}
 
-	if(y<m_oy || m_height>CLayer::WH()){
+	if(y<m_oy || CLayer::VH()>CLayer::WH()){
 		m_sy = m_oy;
 	}
 	else 
-	if(y>(m_oy + CLayer::WH()-m_height)){
-		m_sy = m_oy + CLayer::WH()-m_height;
+	if(y>(m_oy + CLayer::WH()-CLayer::VH())){
+		m_sy = m_oy + CLayer::WH()-CLayer::VH();
 	}
 	else{
 		m_sy=y;

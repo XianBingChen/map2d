@@ -179,7 +179,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:{
 			g_hWnd = hWnd;
 
-			SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)new CProject(MySetTimer,hWnd,1280,720));
+			SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)new CProject(MySetTimer,hWnd,1920,1080));
 			::SetTimer(hWnd,1000,10,NULL);
 
 
