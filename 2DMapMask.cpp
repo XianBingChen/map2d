@@ -193,8 +193,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 		   RECT rect;
-		   rect.right = 1280;
-		   rect.bottom = 720+menu_bar_height;
+		   rect.right = int(1280/66)*66+1;
+		   rect.bottom = int(720/44)*44+1+menu_bar_height;
 		   rect.left = 0;
 		   rect.top = 0;
 		   AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
@@ -338,6 +338,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case IDM_CBRES:
 			proj->CbRes();
+			break;
+		case IDM_UNDO:
+			proj->DoEdit(true);
+			break;
+		case IDM_REDO:
+			proj->DoEdit(false);
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);

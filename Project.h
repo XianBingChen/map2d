@@ -59,4 +59,5 @@ public:
 	inline void ShowBack(bool b){
 		m_backOnly=b;
 	}
+	void DoEdit(bool Undo);
 };

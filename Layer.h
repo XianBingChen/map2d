@@ -2,14 +2,6 @@
 
 #define BPP_RGB 3 
 
-enum MAP_STATE
-{
-	MAP_NORMAL=0,
-	MAP_BLOCK=1,
-	MAP_MARK=2,
-	MAP_WATER=3,
-};
-
 class CLayer
 {
 private:

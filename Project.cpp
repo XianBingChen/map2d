@@ -154,6 +154,7 @@ void CProject::OnMouseDown(int x,int y, bool bShift){
 void CProject::OnMouseUp(int ox,int oy){
 	m_bHover = false;
 	m_bDragMinimap = false;
+	m_grid.onMouseUp();
 }
 
 void CProject::Home(int w,int h){
@@ -204,7 +205,7 @@ void CProject::SetPostion(int x,int y){
 	}
 	else
 	if(x>(m_ox + CLayer::WW()-CLayer::VW())){
-		m_sx = m_ox + CLayer::WW()-CLayer::VW();
+		m_sx = m_ox + CLayer::WW()-CLayer::VW()+1;
 	}
 	else{
 		m_sx=x;
@@ -215,7 +216,7 @@ void CProject::SetPostion(int x,int y){
 	}
 	else 
 	if(y>(m_oy + CLayer::WH()-CLayer::VH())){
-		m_sy = m_oy + CLayer::WH()-CLayer::VH();
+		m_sy = m_oy + CLayer::WH()-CLayer::VH()+1;
 	}
 	else{
 		m_sy=y;
@@ -228,7 +229,7 @@ void CProject::SetOffset(int ox,int oy){
 	}
 	else
 	if(m_sx-ox>(CLayer::WW()-CLayer::VW())){
-		m_ox = m_sx - (CLayer::WW()-CLayer::VW());
+		m_ox = m_sx - (CLayer::WW()-CLayer::VW())-1;
 	}
 	else{
 		m_ox=ox;
@@ -238,7 +239,7 @@ void CProject::SetOffset(int ox,int oy){
 		m_oy = m_sy;
 	}
 	else if(m_sy-oy>(CLayer::WH()-CLayer::VH())){
-		m_oy = m_sy - (CLayer::WH()-CLayer::VH());
+		m_oy = m_sy - (CLayer::WH()-CLayer::VH())-1;
 	}
 	else{
 		m_oy=oy;
@@ -375,4 +376,9 @@ void CProject::CbRes(){
 	m_background.FreeRes();
 	m_map.CreatRes();
 	SetTimer(LoadBackGround,10);
+}
+
+
+void CProject::DoEdit(bool Undo){
+	m_grid.DoEdit(Undo);
 }
