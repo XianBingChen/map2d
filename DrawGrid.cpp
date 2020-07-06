@@ -13,6 +13,7 @@ CDrawGrid::~CDrawGrid(void)
 
 void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy){
 	USES_CONVERSION;
+
 	int i,j;
 	map<int,map<int,int>>::iterator iter = m_cells.begin();
 	for(;iter!=m_cells.end();iter++)

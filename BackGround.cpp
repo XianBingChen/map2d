@@ -100,10 +100,6 @@ void CBackGround::ScaleXY(){
 void CBackGround::OnDraw(HDC hdc,int x,int y){
 	Clear(hdc, m_defaultbg, x, y);
 	if(m_pic && m_pic->GetLastStatus()==S_OK){
-		//Graphics g(hdc);
-		//RectF dst(0,0,CLayer::VW(),CLayer::VH());
-		//g.DrawImage(m_pic, dst, x, y, CLayer::VW()*CLayer::WS(),CLayer::VH()*CLayer::WS(), UnitPixel);
-
 		int scaleW = CLayer::WW()/CLayer::WS();
 		int scaleH = CLayer::WH()/CLayer::WS();
 		CLayer::Draw(hdc, m_buffer, x/CLayer::WS(), y/CLayer::WS(), scaleW, scaleH);

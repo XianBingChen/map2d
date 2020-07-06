@@ -30,13 +30,13 @@ CLayer::CLayer(UINT width,UINT height)
     bmpinfo.bmiHeader.biPlanes=1;  
     bmpinfo.bmiHeader.biBitCount=24;  
     bmpinfo.bmiHeader.biCompression=BI_RGB;  
-    bmpinfo.bmiHeader.biSizeImage=width*height*3;  
+    bmpinfo.bmiHeader.biSizeImage=width*height*BPP_RGB;  
     bmpinfo.bmiHeader.biXPelsPerMeter=0;  
     bmpinfo.bmiHeader.biClrImportant=0;  
     bmpinfo.bmiHeader.biClrUsed=0;  
   
 	m_bmp=CreateDIBSection(m_hdc,&bmpinfo,DIB_RGB_COLORS,(void**) &m_buf,NULL,0);  
-
+	memset(m_buf,0x0,width*height*BPP_RGB);
     HGDIOBJ hOldSel = SelectObject(m_hdc,m_bmp);  
 	DeleteObject(hOldSel);
 

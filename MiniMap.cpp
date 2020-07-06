@@ -33,7 +33,6 @@ float CMiniMap::mh(){
 }
 
 void CMiniMap::OnDraw(HDC dc,int x,int y){
-
 	float rx = (float)x;
 	float ry = (float)y;
 

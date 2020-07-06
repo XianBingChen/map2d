@@ -222,7 +222,7 @@ bool CMapinfo::FromFile(string path){
 		fread(&height,2,1,file);
 		fread(&tile_dir,1,1,file);
 		fread(&size,4,1,file);
-			
+		CLayer::setWWH(width*CLayer::CW(),height*CLayer::CH());	
 		if( version != 4 )
 		{
 			MessageBox(NULL,"版本不支持",NULL,NULL);
