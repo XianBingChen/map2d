@@ -172,9 +172,6 @@ void CDrawGrid::SetMaskOne(int x2,int y2,MAP_STATE a,bool set){
 			if(SetMask(o,a,set)){
 				m_onopt.push_front(o);
 			}
-			else{
-				OutputDebugPrintf("test!");
-			}
 		}
 	}
 }
@@ -210,8 +207,10 @@ void CDrawGrid::SetMasks(int x2,int y2,MAP_STATE a,bool set){
 }
 
 void CDrawGrid::onMouseUp(){
-	m_opUndo.push_front(m_onopt);
-	if(m_opUndo.size()>20)m_opUndo.resize(20);
+	if(m_onopt.size()>0){
+		m_opUndo.push_front(m_onopt);
+		if(m_opUndo.size()>20)m_opUndo.resize(20);
+	}
 	m_opRedo.clear();
 	m_onopt.clear();
 }
@@ -221,9 +220,6 @@ void CDrawGrid::DoEdit(bool Undo){
 		if(m_opUndo.size()>0){
 			list<opstatus> iter = m_opUndo.front();
 			list<opstatus>::iterator child = iter.begin();
-			if(iter.size()>=2){
-				OutputDebugPrintf("test!");
-			}
 			while(child!=iter.end()){
 				opstatus o = *child;
 				ReSetMask(o);
@@ -238,9 +234,6 @@ void CDrawGrid::DoEdit(bool Undo){
 		if(m_opRedo.size()>0){
 			list<opstatus> iter = m_opRedo.front();
 			list<opstatus>::iterator child = iter.begin();
-			if(iter.size()>=2){
-				OutputDebugPrintf("test!");
-			}
 			while(child!=iter.end()){
 				opstatus o = *child;
 				ReSetMask(o);

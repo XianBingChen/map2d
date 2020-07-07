@@ -27,10 +27,10 @@ void CMapinfo::CreatRes(){
 	if(m_path.empty())return;
 	char fullpath[1024];
 	strcpy(fullpath,m_path.c_str());
-	char* ext = strchr(fullpath,'.');
-	if(ext)*ext='\0';
 	char* file = strrchr(fullpath,'\\');
 	if(file){
+		char* ext = strchr(file,'.');
+		if(ext)*ext='\0';
 		*file='\0';
 		file++;
 	}
@@ -60,14 +60,16 @@ void CMapinfo::CreatRes(){
 	int wc = mRealHeight/512;
 	int hc = mRealWidth/512;
 	Bitmap* bmpCombine =new Bitmap(mRealWidth,mRealHeight);
-	for(int i=0;i<=mRealHeight/512;i++){
-		for(int j=0;j<=mRealWidth/512;j++){
-			char path[256]={0};
-			sprintf(path,"%s\\%s\\%s_r%d_c%d.jpg",fullpath,file,file,i+1,j+1);
-			CLayer::CombinePic(*bmpCombine,path,j*512,i*512);
+	if(bmpCombine->GetLastStatus()==S_OK){
+		for(int i=0;i<=mRealHeight/512;i++){
+			for(int j=0;j<=mRealWidth/512;j++){
+				char path[256]={0};
+				sprintf(path,"%s\\%s\\%s_r%d_c%d.jpg",fullpath,file,file,i+1,j+1);
+				CLayer::CombinePic(*bmpCombine,path,j*512,i*512);
+			}
 		}
+		CLayer::SavePicture(*bmpCombine,"image/jpeg",outpath.c_str());
 	}
-	CLayer::SavePicture(*bmpCombine,"image/jpeg",outpath.c_str());
 	delete bmpCombine;
 }
 
@@ -132,10 +134,10 @@ string CMapinfo::GetResPath(){
 	if(m_path.empty())return "";
 	char fullpath[1024];
 	strcpy(fullpath,m_path.c_str());
-	char* ext = strchr(fullpath,'.');
-	if(ext)*ext='\0';
 	char* file = strrchr(fullpath,'\\');
 	if(file){
+		char* ext = strchr(file,'.');
+		if(ext)*ext='\0';
 		*file='\0';
 		file++;
 	}
@@ -148,10 +150,10 @@ string CMapinfo::GetResOut(){
 	char path[1024];
 	char fullpath[1024];
 	strcpy(fullpath,m_path.c_str());
-	char* ext = strchr(fullpath,'.');
-	if(ext)*ext='\0';
 	char* file = strrchr(fullpath,'\\');
 	if(file){
+		char* ext = strchr(file,'.');
+		if(ext)*ext='\0';
 		*file='\0';
 		file++;
 	}
