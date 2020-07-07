@@ -199,11 +199,13 @@ void CProject::SelectLayer(MAP_STATE type){
 }
 
 void CProject::SetPostion(int x,int y){
+
 	if(!m_bound){
 		m_sx=x;
 		m_sy=y;
 		return;
 	}
+
 	if(x<m_ox || CLayer::VW()> CLayer::WW()){
 		m_sx = m_ox;
 	}
@@ -228,11 +230,13 @@ void CProject::SetPostion(int x,int y){
 }
 
 void CProject::SetOffset(int ox,int oy){
+
 	if(!m_bound){
 		m_ox=ox;
 		m_oy=oy;
 		return;
 	}
+
 	if(m_sx-ox<0 || CLayer::VW()> CLayer::WW()){
 		m_ox = m_sx;
 	}

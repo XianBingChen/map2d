@@ -52,7 +52,6 @@ void CMiniMap::OnDraw(HDC dc,int x,int y){
 
 	g.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0x08,0xfe,0x80),2.f), px()-1.f, py()-1.f, mw()+1.f,  mh()+1.f);
 	g.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00),1.f), px() + ox*m_scaleX+1-cw/2, py() + oy*m_scaleY+1-ch/2, cw, ch);
-
 }
 
 void CMiniMap::Create(Bitmap& m_pic){

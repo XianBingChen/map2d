@@ -86,7 +86,8 @@ void CDrawGrid::OnDraw(HDC dc,int x,int y){
 	float sy = (float)(-y%CLayer::CH())/CLayer::WS();
 
 
-	if(CLayer::GetType()){
+	//if(CLayer::GetType())
+	{
 		for(int i=0;i<=height/ch+1;i++)
 		{
 			map<int,map<int,int>>::iterator iter = m_cells.find(i+top);
