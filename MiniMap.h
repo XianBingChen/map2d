@@ -5,8 +5,6 @@ class CMiniMap:public CLayer
 private:
 	float m_scaleX;
 	float m_scaleY;
-	float m_worldWidth;
-	float m_worldHeight;
 	CDrawGrid* m_grid;
 public:
 	CMiniMap(int width, int height);

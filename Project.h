@@ -15,7 +15,7 @@ private:
 	int m_height;
 	int m_backOnly;
 	int m_bDragMinimap;
-
+	bool m_bound;
 	bool m_bHover;
 	
 

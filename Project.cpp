@@ -19,6 +19,7 @@ CProject::CProject(SetTimerPr _SetTimer,HWND hWnd,int width,int height)
 	m_sy=0;
 	m_autox = 0;
 	m_autoy = 0;
+	m_bound = true;
 	m_backOnly = true;
 	m_bHover = false;
 	m_bDragMinimap = false;
@@ -39,8 +40,6 @@ CProject::CProject(SetTimerPr _SetTimer,HWND hWnd,int width,int height)
     SelectObject(m_cache, m_hBmp);
 	ReleaseDC(hWnd,hdc);
 	m_minimap.SetGrid(&m_grid);
-
-	CLayer::setCWH(66,44);
 }
 
 
@@ -200,6 +199,11 @@ void CProject::SelectLayer(MAP_STATE type){
 }
 
 void CProject::SetPostion(int x,int y){
+	if(!m_bound){
+		m_sx=x;
+		m_sy=y;
+		return;
+	}
 	if(x<m_ox || CLayer::VW()> CLayer::WW()){
 		m_sx = m_ox;
 	}
@@ -224,6 +228,11 @@ void CProject::SetPostion(int x,int y){
 }
 
 void CProject::SetOffset(int ox,int oy){
+	if(!m_bound){
+		m_ox=ox;
+		m_oy=oy;
+		return;
+	}
 	if(m_sx-ox<0 || CLayer::VW()> CLayer::WW()){
 		m_ox = m_sx;
 	}

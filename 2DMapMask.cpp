@@ -179,10 +179,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:{
 			g_hWnd = hWnd;
 
-			SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)new CProject(MySetTimer,hWnd,1920,1080));
-			::SetTimer(hWnd,1000,10,NULL);
-
-
 			MENUBARINFO menuInfo = {0};
 			menuInfo.cbSize = sizeof(MENUBARINFO);
 			int rtn = GetMenuBarInfo(hWnd, OBJID_MENU, 0, &menuInfo);
@@ -191,12 +187,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				menu_bar_height = menuInfo.rcBar.bottom - menuInfo.rcBar.top+1;
 			}
 
-
 		   RECT rect;
 		   rect.right = int(1280/66)*66+1;
-		   rect.bottom = int(720/44)*44+1+menu_bar_height;
+		   rect.bottom = int(720/44)*44+1;
 		   rect.left = 0;
 		   rect.top = 0;
+
+			CLayer::setVWH(rect.right,rect.bottom);
+			CLayer::setCWH(66,44);
+			CLayer::setWWH(66*100,44*100);
+
+			SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)new CProject(MySetTimer,hWnd,1920,1080));
+			::SetTimer(hWnd,1000,10,NULL);
+
 		   AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 		   ::SetWindowPos(hWnd,NULL,0,0,rect.right - rect.left, rect.bottom - rect.top,SWP_NOMOVE);
 		   CenterWindow(hWnd);

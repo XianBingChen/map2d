@@ -61,8 +61,8 @@ public:
 
 
 	inline static void setWWH(int w,int h){
-		m_Wwidth = w ;
-		m_Wheight = h ;
+		m_Wwidth = int(w/m_Cwidth)*m_Cwidth;
+		m_Wheight = int(h/m_Cheight)*m_Cheight;
 	}
 
 	static void SavePicture(Bitmap& bmpCombine,const char *format, const char *path);

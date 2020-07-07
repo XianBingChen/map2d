@@ -5,10 +5,8 @@
 CMiniMap::CMiniMap(int width, int height):CLayer(240, 160)
 {
 	m_grid = NULL;
-	m_scaleX=1.0f;
-	m_scaleY=1.0f;
-	m_worldWidth=(float)CLayer::width();
-	m_worldHeight=(float)CLayer::height();
+	m_scaleX = mw()/CLayer::WW();
+	m_scaleY = mh()/CLayer::WH();
 }
 
 
@@ -39,8 +37,8 @@ void CMiniMap::OnDraw(HDC dc,int x,int y){
 	float cw = 10.f;
 	float ch = cw * CH()/ CW();
 
-	float ox = (rx-CW()/2+VW()/2);
-	float oy = (ry-CH()/2+VH()/2);
+	float ox = (rx+VW()/2);
+	float oy = (ry+VH()/2);
 
 	Graphics g(dc);
 
