@@ -327,6 +327,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			::CheckMenuItem(hm,IDM_PEN_X2,MF_UNCHECKED);
 			::CheckMenuItem(hm,IDM_PEN_X3,MF_CHECKED);
 			::CheckMenuItem(hm,IDM_PEN_X4,MF_UNCHECKED);
+			break;
 
 		case IDM_PEN_X4:
 			proj->SetPenSize(7);
