@@ -19,7 +19,7 @@ float CMiniMap::px(){
 }
 
 float CMiniMap::py(){
-	return 10;
+	return 36;
 }
 
 float CMiniMap::mw(){
@@ -46,10 +46,13 @@ void CMiniMap::OnDraw(HDC dc,int x,int y){
 	g.DrawImage(bmp, px(), py(), mw(), mh());
 	delete bmp;
 
+	g.FillRectangle(GetBrush(Color::MakeARGB(0xFF,0x00,0x00,0x00)), px()-1.f, py()-28.f, mw()+1.f,  22.f);
+	g.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0x08,0xfe,0x80),2.f), px()-1.f, py()-28.f, mw()+1.f,  22.f);
+
 	if(m_grid){
 		m_grid->OnDrawMini(g,px(), py(),m_scaleX,m_scaleY);
 	}
-
+	
 	g.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0x08,0xfe,0x80),2.f), px()-1.f, py()-1.f, mw()+1.f,  mh()+1.f);
 	g.DrawRectangle(GetPen(Color::MakeARGB(0xFF,0xFF,0x00,0x00),1.f), px() + ox*m_scaleX+1-cw/2, py() + oy*m_scaleY+1-ch/2, cw, ch);
 }

@@ -5,6 +5,10 @@
 CDrawGrid::CDrawGrid(int width, int height)
 	:CLayer(width,height)
 {
+	hoverX = -1;
+	hoverY = -1;
+	cursorX = (CLayer::VW()/CLayer::CW())/2;
+	cursorY = (CLayer::VH()/CLayer::CH())/2;
 }
 
 CDrawGrid::~CDrawGrid(void)
@@ -39,25 +43,28 @@ void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy)
 	}
 
 	Gdiplus::FontFamily fontFamily(L"ºÚÌå");
-	Gdiplus::Font font(&fontFamily, 16, Gdiplus::FontStyleRegular, Gdiplus::Unit::UnitPixel);
+	Gdiplus::Font font(&fontFamily, 14, Gdiplus::FontStyleRegular, Gdiplus::Unit::UnitPixel);
 
-	bstr_t text = A2W(m_filename.c_str());
+	bstr_t text ="";
+	text+="[";
+	text += A2W(m_filename.c_str());
+	text+="]";	
+	
 	if(wcslen(text)>0){
+		text+="[";
 		switch (CLayer::GetType())
 		{
 		case MAP_BLOCK:
-			text+="_";
 			text+="ÕÏ°­²ã";
-		break;
+			break;
 		case MAP_MARK:
-			text+="_";
 			text+="ÕÚµ²²ã";
-		break;
+			break;
 		default:
-			text+="_";
 			text+="±³¾°";
 			break;
 		}
+		text+="]";
 
 		if(CLayer::GetType()!=0){
 			text+="[";
@@ -66,7 +73,11 @@ void CDrawGrid::OnDrawMini(Graphics& graphics,float x,float y,float sx,float sy)
 		}
 	}
 
-	graphics.DrawString(text, (INT)wcslen(text), &font,Gdiplus::PointF(x, y),GetBrush(Color::MakeARGB(0xFF,0xFF,0xFF,0xFF)));
+	char temp[256];
+	sprintf(temp, "[%d,%d][%d,%d]",cursorX, cursorY, hoverX, hoverY);
+	text+=temp;
+
+	graphics.DrawString(text, (INT)wcslen(text), &font,Gdiplus::PointF(x, y-25.f),GetBrush(Color::MakeARGB(0xFF,0xFF,0x00,0xFF)));
 }
 
 void CDrawGrid::OnDraw(HDC dc,int x,int y){
